@@ -44,44 +44,40 @@
 
   header{
     background:#173627; padding-top:env(safe-area-inset-top,0px);
-    position:relative; overflow:hidden;
+    position:relative; z-index:5;
   }
   .banner{ position:relative; container-type:inline-size; line-height:1; }
   .banner-img{ display:block; width:100%; height:auto; max-height:360px; object-fit:cover; object-position:center 22%; }
 
   .banner-bar{
     position:absolute; left:0; right:0; bottom:0; z-index:2;
-    padding:34px 0 10px;
-    background:linear-gradient(to top, rgba(0,38,16,.62), rgba(0,38,16,0));
+    transform:translateY(50%);
   }
   .banner-bar-inner{
     max-width:920px; margin:0 auto; padding:0 10px;
-    display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:6px 8px;
+    display:flex; justify-content:flex-end;
   }
   .site-title{
-    margin:0 0 5px; flex:1 1 auto; white-space:nowrap; line-height:1.3;
-    font-size:clamp(.72rem,3vw,.95rem); font-weight:700; letter-spacing:.03em; color:#fff;
-    text-shadow:0 1px 4px rgba(0,30,12,.8), 0 0 2px rgba(0,30,12,.8);
+    position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden;
+    clip:rect(0 0 0 0); white-space:nowrap; border:0;
   }
-  nav{ display:flex; gap:4px; flex:0 0 auto; }
+  nav{ display:flex; gap:5px; flex:0 0 auto; }
   nav button{
-    appearance:none; border:1px solid rgba(255,255,255,.45); background:rgba(0,40,18,.42);
-    color:#fff; font:inherit; font-weight:700; font-size:.74rem; line-height:1.2;
-    padding:6px 9px; border-radius:999px; cursor:pointer; white-space:nowrap;
+    appearance:none; border:1px solid rgba(255,255,255,.55); background:rgba(0,40,18,.65);
     -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
-    text-shadow:0 1px 3px rgba(0,30,12,.5);
+    color:#fff; font:inherit; font-weight:700; font-size:.88rem; line-height:1.2;
+    padding:9px 13px; border-radius:999px; cursor:pointer; white-space:nowrap;
     transition:background .15s, color .15s;
   }
-  nav button[aria-selected="true"]{ background:#fff; color:#1F4A38; border-color:#fff; text-shadow:none; }
+  nav button[aria-selected="true"]{ background:#fff; color:#1F4A38; border-color:var(--court-2); }
   @media (min-width:640px){
     .banner-bar-inner{ padding:0 16px; }
-    .site-title{ font-size:1rem; margin-bottom:7px; }
-    nav{ gap:6px; }
-    nav button{ font-size:.9rem; padding:8px 18px; }
+    nav{ gap:8px; }
+    nav button{ font-size:1.1rem; padding:11px 26px; }
   }
   nav button:focus-visible{ outline:2px solid var(--ball); outline-offset:2px; }
 
-  main{ max-width:920px; margin:0 auto; padding:22px 16px 60px; }
+  main{ max-width:920px; margin:0 auto; padding:46px 16px 60px; }
   section[hidden]{ display:none; }
 
   h2{ font-size:1.05rem; margin:0 0 14px; font-weight:700; }
@@ -304,11 +300,11 @@
     <p class="italic-note">這裡記錄的每一個數字，都是孩子們在球場上全力奔馳、揮灑汗水的拼鬥足跡...<br>在勝負與數字之外，希望小球員們能看見自己與隊友們的努力，砥礪自己、肯定隊友，也為小學階段熱愛籃球的自己留下一份努力的證明。</p>
     <p class="update-stamp">更新日期：1151007</p>
     <div class="scope-tabs" id="scopeTabs">
-      <button data-scope="all" aria-selected="true"><strong>所有比賽</strong><small>友誼賽+正式比賽</small></button>
+      <button data-scope="all" aria-selected="false"><strong>所有比賽</strong><small>友誼賽+正式比賽</small></button>
       <button data-scope="nt" aria-selected="false"><strong>115新北對抗賽</strong><small id="ntScopeSub"></small></button>
     </div>
 
-    <div class="scope-panel" id="scope-all">
+    <div class="scope-panel" id="scope-all" hidden>
       <div class="game-tabs" data-sub="all">
         <button data-target="all-rank" aria-selected="true">攻守排行</button>
         <button data-target="all-grade" aria-selected="false">個人數據</button>
@@ -374,6 +370,9 @@ document.querySelectorAll('nav[role="tablist"] button').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     document.querySelectorAll('nav[role="tablist"] button').forEach(b=>b.setAttribute('aria-selected', b===btn));
     document.querySelectorAll('main > section').forEach(s=> s.hidden = (s.id !== btn.dataset.tab));
+    // 每次進入「球員表現」都回到尚未展開的初始畫面
+    document.querySelectorAll('#scopeTabs button').forEach(b=>b.setAttribute('aria-selected','false'));
+    document.querySelectorAll('.scope-panel').forEach(p=>p.hidden=true);
   });
 });
 
